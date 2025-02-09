@@ -1,0 +1,292 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+    color: #333;
+    /* Make the layout responsive */
+    width: 100%;
+    overflow-x: hidden; /* Prevent horizontal scrolling */
+}
+
+.container {
+    width: 80%;
+    margin: auto;
+    overflow: hidden;
+    /* Ensure container adapts to screen size */
+    max-width: 1200px; /* Optional: Set a maximum width */
+}
+
+header {
+    background: #5cb85c;
+    color: white;
+    padding-top: 30px;
+    min-height: 70px;
+    border-bottom: 3px solid #333;
+    /* Ensure header spans the full width */
+    width: 100%;
+    box-sizing: border-box; /* Include padding and border in the element's total width and height */
+}
+
+header a {
+    color: #fff;
+    text-decoration: none;
+    text-transform: uppercase;
+    font-size: 16px;
+}
+
+header ul {
+    margin: 0;
+    padding: 0;
+}
+
+header li {
+    float: left;
+    display: inline;
+    padding: 0 20px;
+    /* Adjust padding for smaller screens if necessary */
+}
+
+header #branding {
+    float: left;
+}
+
+header #branding h1 {
+    margin: 0;
+}
+
+header nav {
+    float: right;
+    margin-top: 10px;
+}
+
+header nav li a {
+    pointer-events: auto;
+    cursor: pointer;
+}
+
+header .highlight, header .current a {
+    color: #c0392b;
+    font-weight: bold;
+}
+
+#newsletter {
+    padding: 15px;
+    color: #fff;
+    background: #333;
+    /* Ensure newsletter spans the full width */
+    width: 100%;
+    box-sizing: border-box; /* Include padding and border in the element's total width and height */
+}
+
+#newsletter h1 {
+    float: left;
+}
+
+#newsletter form {
+    float: right;
+    margin-top: 15px;
+}
+
+#newsletter input[type="email"] {
+    padding: 4px;
+    height: 25px;
+    width: 250px;
+    /* Make input responsive */
+    max-width: 100%;
+    box-sizing: border-box;
+}
+
+.button_1 {
+    height: 38px;
+    background: #e67e22;
+    border: 0;
+    padding-left: 20px;
+    padding-right: 20px;
+    color: #fff;
+    cursor: pointer;
+    /* Adapt button for smaller screens */
+    width: auto;
+    white-space: nowrap; /* Prevent text from wrapping */
+}
+
+#main {
+    padding: 20px;
+}
+
+article#main-col {
+    float: left;
+    width: 65%;
+    /* Adapt column width for smaller screens */
+    box-sizing: border-box;
+}
+
+aside#sidebar {
+    float: right;
+    width: 30%;
+    margin-top: 10px;
+    /* Adapt sidebar width for smaller screens */
+    box-sizing: border-box;
+}
+
+aside#sidebar .quote input, aside#sidebar .quote textarea {
+    width: 90%;
+    padding: 5px;
+    /* Ensure input and textarea adapt to screen size */
+    max-width: 100%;
+    box-sizing: border-box;
+}
+
+footer {
+    padding: 20px;
+    margin-top: 20px;
+    color: #fff;
+    background-color: #e67e22;
+    text-align: center;
+    /* Ensure footer spans the full width */
+    width: 100%;
+    box-sizing: border-box; /* Include padding and border in the element's total width and height */
+}
+
+/* Styles for the introduction content */
+.introduction {
+    margin-bottom: 20px;
+    padding: 10px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    /* Ensure introduction adapts to screen size */
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.introduction h2 {
+    color: #5cb85c;
+}
+
+/* Styles for the executive summary */
+.executive-summary {
+    margin-bottom: 20px;
+    padding: 10px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    /* Ensure executive summary adapts to screen size */
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.executive-summary h3 {
+    color: #5cb85c;
+}
+
+/* Styles for the marketing plan */
+.marketing-plan {
+    margin-bottom: 20px;
+    padding: 10px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    /* Ensure marketing plan adapts to screen size */
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.marketing-plan h3 {
+    color: #5cb85c;
+}
+
+/* Responsive design */
+@media(max-width: 768px) {
+    header #branding,
+    header nav,
+    header nav li,
+    #newsletter h1,
+    #newsletter form,
+    article#main-col,
+    aside#sidebar {
+        float: none;
+        text-align: center;
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    header {
+        padding-bottom: 20px;
+    }
+
+    #newsletter form {
+        margin-top: 10px;
+    }
+
+     header nav li {
+        display: block; /* Display nav items on separate lines */
+        margin: 5px 0; /* Add some spacing */
+    }
+}
+
+.introduction img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin: 10px auto;
+}
+
+/* Slideshow styles */
+.slideshow-container {
+    max-width: 500px;
+    position: relative;
+    margin: auto;
+}
+
+.slide {
+    display: none;
+    padding: 10px;
+    text-align: center;
+}
+
+.slide img {
+    width: 100%;
+    height: auto;
+    border: 1px solid #ddd;
+}
+
+/* Login Form Styles */
+#login-container {
+    width: 300px;
+    margin: 50px auto;
+    padding: 20px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    text-align: center;
+    /* Ensure login container adapts to screen size */
+    max-width: 90%;
+    box-sizing: border-box;
+}
+
+#login-container input[type="email"],
+#login-container input[type="text"],
+#login-container button {
+    margin-bottom: 10px;
+    padding: 8px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+#login-container #verification-question {
+    margin-bottom: 10px;
+    font-weight: bold;
+}
+
+#login-container .error-message {
+    color: red;
+    margin-top: 10px;
+}
+
+/* Styles for the game button */
+.game-button {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #4CAF50;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    margin-top: 20px;
+}

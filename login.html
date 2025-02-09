@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div id="branding">
+                <h1>Cheese-Filled Okra</h1>
+            </div>
+        </div>
+    </header>
+
+    <section id="login-container">
+        <h2>Login</h2>
+        <form id="login-form" onsubmit="handleLogin(event); return false;">
+            <input type="email" id="login-email" placeholder="Enter Email" required>
+            <div id="verification-question"></div>
+            <input type="text" id="verification-answer" placeholder="Enter Answer" required>
+            <button class="button_1" type="submit">Login</button>
+        </form>
+        <p id="login-error" class="error-message"></p>
+    </section>
+    <script src="script.js"></script>
+
+    <script>
+                function generateVerificationQuestion() {
+            const num1 = Math.floor(Math.random() * 10) + 1;
+            const num2 = Math.floor(Math.random() * 10) + 1;
+            const operation = Math.random() < 0.5 ? '+' : '-'; // Randomly choose + or -
+            let answer;
+
+            if (operation === '+') {
+                answer = num1 + num2;
+            } else {
+                answer = num1 - num2;
+            }
+
+            document.getElementById('verification-question').textContent = `What is ${num1} ${operation} ${num2}?`;
+            return answer.toString(); // Return the answer as a string
+        }
+
+    let correctAnswer = generateVerificationQuestion();
+
+     function handleLogin(event) {
+            event.preventDefault();
+
+            const email = document.getElementById('login-email').value;
+            const answer = document.getElementById('verification-answer').value;
+            const errorMessage = document.getElementById('login-error');
+
+            if (answer === correctAnswer) { // Check Correct Answer
+                isLoggedIn = true;
+                // Store login state in localStorage
+                localStorage.setItem('isLoggedIn', 'true');
+                // Redirect to home page after successful login
+                window.location.href = "index.html";
+                errorMessage.textContent = ''; // Clear any previous error message
+            } else {
+                errorMessage.textContent = 'Incorrect answer. Please try again.';
+                correctAnswer = generateVerificationQuestion(); // Generate a new question
+                document.getElementById('verification-answer').value = ''; // Clear the input
+            }
+        }
+    </script>
+</body>
+</html>

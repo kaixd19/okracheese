@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cheese-Filled Okra</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div id="branding">
+                <h1>Cheese-Filled Okra</h1>
+            </div>
+            <nav>
+                <ul>
+                    <li class="current"><a href="index.html">Home</a></li>
+                    <li><a href="about.html">About</a></li>
+                    <li><a href="services.html">Our Product</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <section id="newsletter">
+        <div class="container">
+            <h1>Facts About Okra</h1>
+            <div id="okraFacts">
+                <p id="initialFact" style="text-align: center;">Click here to learn more facts about okra!</p>
+                <div id="additionalFacts" style="display:none; text-align: center;">
+                    <p id="currentFact"></p>
+                    <button id="backButton" style="display: none;" onclick="showInitialFact()">Back</button>
+                    <button id="nextFactButton" onclick="showNextFact()">More Facts</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="main-content">
+        <section id="main">
+            <div class="container">
+                <article id="main-col">
+                    <div id="introduction" class="introduction">
+                        <h2>Cheese-Filled Okra</h2>
+                        <img src="IMG_20250209_220323.jpg" alt="Cheese-Filled Okra">
+                        <h3>Introduction</h3>
+                        <p>
+                            Okra (<i>Abelmoschus Esculentus</i>), commonly known as lady’s finger, is a warm-season vegetable that belongs to the Malvaceae family.
+                            It is an annual herb grown in tropical, subtropical, and warm temperate climates across Africa, Asia, Southern Europe, and America.
+                            Okra is a nutritious and tasty vegetable whose appreciation is more commonly linked to sensor characteristics, such as texture and flavor.
+                            This vegetable is rich in vitamins C and K, high in fiber and magnesium, and packed with antioxidants.
+                            Though often ignored and sometimes made fun of, okra contributes various potential health benefits; its support for heart health and blood sugar control.
+                            Okra pod is a greenish capsule usually 10-30 cm long; slightly curved in shape and fibrous in nature, a much-dotted seed.
+                        </p>
+                        <p>
+                            There’s cheese, a highly enjoyed dairy product for its rich taste and creaminess in texture.
+                            It is also a great source of calcium and protein necessary for bone development and muscle work.
+                        </p>
+                        <p>
+                            Taking this as an inspiration, the researchers have brought these two different food combinations together into one to prepare Cheese-Filled Okra.
+                            We wanted to make it fun and tasty, transforming a rather ordinary vegetable into something truly exciting and delicious.
+                            Careful preparation, the removal of sliminess by washing the okra deeply before filling it with melted cheese, coating, and frying, transforms this combination of food that may have the potential to create an exciting experience for consumers.
+                        </p>
+
+                        <a href="game.html" class="game-button">Play Now!</a>
+                    </div>
+                </article>
+
+                <aside id="sidebar">
+                    <div class="quote">
+                        <h3>Motivational Quote</h3>
+                        <form id="quoteForm" onsubmit="handleQuoteSubmit(event); return false;">
+                            <div>
+                                <label>Name</label><br>
+                                <input type="text" id="quoteName" name="quoteName" placeholder="Name" required>
+                            </div>
+                            <div>
+                                <label>Email</label><br>
+                                <input type="email" id="quoteEmail" name="quoteEmail" placeholder="Email Address" required>
+                            </div>
+                            <button class="button_1" type="submit">Get Quote</button>
+                        </form>
+                        <div id="quoteDisplay" style="display:none;">
+                            <p id="motivationalQuote"></p>
+                        </div>
+                    </div>
+                </aside>
+            </div>
+        </section>
+    </section>
+
+    <script>
+        const okraFacts = [
+            "Okra is also known as 'lady's finger'.",
+            "Okra is a good source of vitamins A and C.",
+            "Okra is high in fiber, which aids digestion.",
+            "Okra is a warm-season vegetable.",
+            "Okra is used in various cuisines around the world.",
+            "Okra is a member of the mallow family.",
+            "Okra is often used as a thickening agent in soups and stews.",
+            "Okra seeds can be roasted and ground to make a coffee substitute.",
+            "Okra is relatively low in calories.",
+            "Okra plants have attractive flowers.",
+            "Okra is cultivated in tropical and subtropical regions.",
+            "Okra is believed to have originated in Ethiopia.",
+            "Okra is a popular ingredient in Creole and Cajun cooking.",
+            "Okra is sometimes pickled for preservation.",
+            "Okra is used in traditional medicine for its potential health benefits.",
+            "Okra is often paired with tomatoes and onions in recipes.",
+            "Okra is a good source of folate.",
+            "Okra is rich in antioxidants.",
+            "Okra is a self-pollinating plant.",
+            "Okra is a versatile vegetable that can be grilled, fried, or boiled."
+        ]; // Add all 100 facts here
+
+        let currentFactIndex = 0;
+
+        document.getElementById('initialFact').addEventListener('click', function() {
+            document.getElementById('initialFact').style.display = 'none';
+            document.getElementById('additionalFacts').style.display = 'block';
+            document.getElementById('backButton').style.display = 'inline-block';
+            showNextFact();
+        });
+
+        function showNextFact() {
+            document.getElementById('backButton').style.display = 'inline-block';
+            document.getElementById('currentFact').textContent = okraFacts[currentFactIndex];
+            currentFactIndex = (currentFactIndex + 1) % okraFacts.length; // Loop through facts
+        }
+
+        function showInitialFact() {
+            document.getElementById('additionalFacts').style.display = 'none';
+            document.getElementById('initialFact').style.display = 'block';
+            document.getElementById('backButton').style.display = 'none';
+        }
+
+        function handleQuoteSubmit(event) {
+            event.preventDefault();
+
+            const quotes = [
+                "The only way to do great work is to love what you do. - Steve Jobs",
+                "Believe you can and you're halfway there. - Theodore Roosevelt",
+                "The future belongs to those who believe in the beauty of their dreams. - Eleanor Roosevelt",
+                "The only limit to our realization of tomorrow will be our doubts of today. - Franklin D. Roosevelt",
+                "It’s always seems impossible until it's done. - Nelson Mandela",
+                "Don't watch the clock; do what it does. Keep going. - Sam Levenson",
+                "Don't be pushed around by the fears in your mind. Be led by the dreams in your heart. - Roy T. Bennett",
+                "Success is not the key to happiness. Happiness is the key to success. If you love what you are doing, you will be successful. - Albert Schweitzer",
+                "Start where you are. Use what you have. Do what you can. - Arthur Ashe",
+                "The best way to predict your future is to create it. - Peter Drucker"
+            ];
+
+            const randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
+            document.getElementById('motivationalQuote').textContent = randomQuote;
+            document.getElementById('quoteDisplay').style.display = 'block';
+            document.getElementById('quoteForm').style.display = 'none';
+        }
+    </script>
+
+    <script src="script.js"></script>
+</body>
+</html>
