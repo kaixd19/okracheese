@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Responsive viewport -->
     <title>Okra Games</title>
     <link rel="stylesheet" href="style.css">
     <style>
@@ -46,29 +47,31 @@
 
         #back-button,
         #shop-button {
-            padding: 10px 20px;
-            font-size: 1.2em;
+            padding: 6px 12px;
+            /* Even smaller padding */
+            font-size: 0.9em;
+            /* Even smaller font */
             background-color: #4CAF50;
             color: white;
             border: none;
             cursor: pointer;
             position: absolute;
-            /* Added position: absolute */
-            top: 10px;
+            top: 6px;
+            /* Adjust top position */
         }
 
         /* Adjustments for shop button */
         #shop-button {
-            right: 10px;
-            /* Align to the right */
+            right: 6px;
+            /* Adjust right position */
             left: auto;
             /* Override potential left alignment */
         }
 
         /* Adjustments for back button */
         #back-button {
-            left: 10px;
-            /* Align to the left */
+            left: 6px;
+            /* Adjust left position */
             right: auto;
             /* Override potential right alignment */
         }
@@ -176,6 +179,8 @@
             border: 1px solid #ccc;
             padding: 20px;
             text-align: center;
+            /* Add touch-action: none; to prevent scrolling issues */
+            touch-action: none;
         }
 
         #dino {
@@ -208,22 +213,22 @@
             cursor: pointer;
         }
 
-        #score {
-            position: absolute;
-            top: 10px;
-            left: 50%;
-            transform: translateX(-50%);
-            font-size: 1.5em;
-            color: #333;
-        }
-
+        #score,
         #high-score {
             position: absolute;
-            top: 40px;
+            top: 10px;
+            /* Adjust as needed */
             left: 50%;
             transform: translateX(-50%);
             font-size: 1.2em;
-            color: #666;
+            /* Corrected to em */
+            color: #333;
+            text-align: center;
+            /* Ensure text is centered */
+        }
+
+        #high-score {
+            top: 30px;
         }
 
         #pause-button {
@@ -263,6 +268,42 @@
             height: 80px;
             background-color: darkgreen;
         }
+
+        #tap-to-start {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 2em;
+            color: #333;
+            cursor: pointer;
+        }
+
+        #game-over-message {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 1.5em;
+            /* Reduced size */
+            color: red;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        #game-over-message button {
+            margin-top: 5px;
+            /* Further reduced margin */
+            padding: 5px 10px;
+            /* Further reduced padding */
+            font-size: 0.8em;
+            /* Further reduced font size */
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
     </style>
 </head>
 
@@ -286,8 +327,8 @@
         <div id="top-bar">
             <div id="currency">Okra Coins: <span id="currency-value">0</span></div>
             <div id="level">Level: <span id="level-value">1</span></div>
-            <div id="taps">Taps: <span id="taps-value">0</span></div>
-            <div id="taps-needed">Taps Needed: <span id="taps-needed-value">100</span></div>
+            <div id="taps">Water: <span id="taps-value">0</span></div>
+            <div id="taps-needed">Water Needed: <span id="taps-needed-value">100</span></div>
         </div>
         <div id="plant"></div>
     </div>
@@ -308,6 +349,11 @@
         <div id="score">Score: <span id="score-value">0</span></div>
         <div id="high-score">High Score: <span id="high-score-value">0</span></div>
         <div id="dino"></div>
+        <div id="tap-to-start">Tap to Start</div>
+        <div id="game-over-message">
+            Game Over! Your score: <span id="final-score">0</span>
+            <button id="play-again-button">Play Again</button>
+        </div>
     </div>
 
     <script>
@@ -325,19 +371,16 @@
         const tapsDisplay = document.getElementById('taps-value');
         const tapsNeededDisplay = document.getElementById('taps-needed-value');
 
-        //Game Variables
-        let currency = 0;
-        let plantLevel = 1;
-        let taps = 0; // Total taps applied
-        let tapsPerWater = 10; // Each water purchase gives 10 taps
-        let tapsNeeded = 100; // Initial taps needed for level 1
-        let isShopOpen = false;
-
         //Dino Okra Jump Elements
         const dino = document.getElementById('dino');
         const dinoGameContainer = document.getElementById('dino-game-container');
+        const highScoreDisplay = document.getElementById('high-score-value');
+        const pauseButton = document.getElementById('pause-button');
+        const tapToStart = document.getElementById('tap-to-start');
+        const gameOverMessage = document.getElementById('game-over-message');
+        const playAgainButton = document.getElementById('play-again-button');
+        const finalScoreDisplay = document.getElementById('final-score');
         const scoreDisplay = document.getElementById('score-value');
-        const highScoreDisplay = document.getElementById('high-score-value'); // Corrected variable name
 
         let isJumping = false;
         let position = 0;
@@ -345,7 +388,17 @@
         let gameInterval;
         let obstacleInterval;
         let isPaused = false;
+        let gameStarted = false;
         let highScore = localStorage.getItem('highScore') || 0;
+        let currency = 0; // Initialize currency
+        let isPausedJump = false; // Track pause state for Jump Game
+
+        let tapsPerWater = 10; //Fixed Taps per water
+
+        //Plant Growth Values
+        let plantLevel = 1;
+        let taps = 0;
+        let tapsNeeded = plantLevel * 100; // 100, 200, 300, 400
 
         //Plant Growth Visuals
         const plantStages = {
@@ -380,6 +433,7 @@
                 if (currency >= 10) {
                     currency -= 10;
                     applyTaps(tapsPerWater); // Buy water and get taps
+                    updateCurrencyDisplay(); // Update display after purchase
                 } else {
                     alert("Not enough Okra Coins!");
                 }
@@ -388,11 +442,11 @@
                     currency -= 20;
                     // You can add a fertilizer effect here, e.g., reduce water needed
                     alert("Fertilizer used! (No effect yet)");
+                    updateCurrencyDisplay(); // Update display after purchase
                 } else {
                     alert("Not enough Okra Coins!");
                 }
             }
-            updateCurrencyDisplay();
         }
 
         function applyTaps(amount) {
@@ -445,6 +499,9 @@
 
         // Game Selection
         function showGameSelect() {
+            gameContainer.style.display = 'none';
+            dinoGameContainer.style.display = 'none';
+            shop.style.display = 'none';
             playScreen.style.display = 'none';
             gameSelect.style.display = 'block';
         }
@@ -459,10 +516,10 @@
             plant.classList.add('seed'); // Start as a seed
             updateDisplay();
             isPaused = true; //Pause
+            updateCurrencyDisplay(); // Initial display of currency
 
             // Attach event listener for earning coins
-            gameContainer.addEventListener('click', increaseCurrency);
-            updateCurrencyDisplay();
+            gameContainer.addEventListener('touchstart', increaseCurrency);
         }
 
         function loadJumpGame() {
@@ -472,7 +529,7 @@
             dinoGameContainer.style.display = 'flex'; // Show Dino Okra Jump Screen
 
             // Remove event listener from Grow Okra Plant
-            gameContainer.removeEventListener('click', increaseCurrency);
+            gameContainer.removeEventListener('touchstart', increaseCurrency);
 
             //Start Dino Okra Jump
             startJumpGame();
@@ -509,14 +566,14 @@
         function generateObstacle() {
             const obstacle = document.createElement('div');
             obstacle.classList.add('obstacle');
-            let obstaclePosition = 800; // Start off-screen
+            let obstaclePosition = dinoGameContainer.offsetWidth + 100; // Adjusted start position
             let randomTime = Math.random() * 4000 + 2000;
 
             obstacle.style.left = obstaclePosition + 'px';
             dinoGameContainer.appendChild(obstacle); // Add to dino game container
 
             let leftInterval = setInterval(() => {
-                if (isPaused) return; // Do nothing if game is paused
+                if (isPausedJump || !gameStarted) return; // Do nothing if game is paused or not started
 
                 if (obstaclePosition > 0 && obstaclePosition < 50 && position < 50) {
                     // Game Over
@@ -529,7 +586,7 @@
             }, 20);
 
             setTimeout(() => {
-                if (!isPaused) {
+                if (!isPausedJump && gameStarted) {
                     generateObstacle();
                 }
             }, randomTime);
@@ -537,35 +594,45 @@
 
         function startGame() {
             //Reset everything
-            isPaused = false;
+            isPausedJump = false;
             isJumping = false;
             position = 0;
+            gameStarted = true;
 
             highScoreDisplay.textContent = highScore; // Display initial high score
             score = 0;
-            scoreDisplay.textContent = score;
+            updateScoreDisplay();
 
             obstacleInterval = setInterval(generateObstacle, 2000);
 
             gameInterval = setInterval(() => {
-                score++;
-                scoreDisplay.textContent = score;
+                if (!isPausedJump) { // Only increase score if not paused
+                    score++;
+                    updateScoreDisplay();
+                }
             }, 100);
         }
 
         function pauseGame() {
-            isPaused = true;
-            pauseButton.textContent = "Resume";
+            isPausedJump = true; //Pause
+            pauseButton.textContent = "Resume"; //Change the button
+            clearInterval(gameInterval); // Stop score increase
         }
 
         function resumeGame() {
-            isPaused = false;
-            pauseButton.textContent = "Pause";
-            generateObstacle(); // Restart obstacle generation
+            isPausedJump = false; //resume
+            pauseButton.textContent = "Pause"; // Change the button
+            generateObstacle(); //Restart
+            gameInterval = setInterval(() => { // Resume score increase
+                if (!isPausedJump) {
+                    score++;
+                    updateScoreDisplay();
+                }
+            }, 100);
         }
 
         function togglePause() {
-            if (isPaused) {
+            if (isPausedJump) {
                 resumeGame();
             } else {
                 pauseGame();
@@ -575,6 +642,7 @@
         function gameOver() {
             clearInterval(gameInterval);
             clearInterval(obstacleInterval);
+            gameStarted = false; // Set gameStarted to false
 
             // Update high score if necessary
             if (score > highScore) {
@@ -583,15 +651,20 @@
                 highScoreDisplay.textContent = highScore;
             }
 
-            alert("Game Over! Score: " + score);
+            //Show play again message
+            finalScoreDisplay.textContent = score;
+            gameOverMessage.style.display = 'flex';
+            // Show the game over message
+            gameOverMessage.style.display = 'flex';
         }
 
         function startJumpGame() {
             //Initial variables
             highScoreDisplay.textContent = highScore;
-            isPaused = false;
+            isPausedJump = false;
             isJumping = false;
             position = 0;
+            gameStarted = false;
 
             // Set button Text
             pauseButton.textContent = "Pause";
@@ -599,25 +672,15 @@
             // Show high score
             highScoreDisplay.textContent = highScore;
 
-            score = 0;
-            scoreDisplay.textContent = score;
+            document.getElementById('tap-to-start').style.display = 'block';
+            document.getElementById('game-over-message').style.display = 'none';
 
-            highScoreDisplay.textContent = highScore;
+            // Event handler for Play Again button
+            playAgainButton.onclick = function () {
+                resetGame();
+            };
 
-            obstacleInterval = setInterval(generateObstacle, 2000);
-
-            //Add a score
-            gameInterval = setInterval(() => {
-                score++;
-                scoreDisplay.textContent = score;
-            }, 100);
-
-            //Set up the keys for the game
-            window.addEventListener('keydown', function (e) {
-                if (e.code === "Space" && isJumping == false) {
-                    jump();
-                }
-            });
+            dinoGameContainer.addEventListener('touchstart', startGameHandler);
         }
 
         function showGameSelect() {
@@ -626,6 +689,42 @@
             shop.style.display = 'none';
             playScreen.style.display = 'none';
             gameSelect.style.display = 'block';
+        }
+
+        function startGameHandler() {
+            if (!gameStarted) {
+                startGame();
+                tapToStart.style.display = 'none'; // Hide "Tap to Start"
+                gameOverMessage.style.display = 'none'; //Hide game over message
+
+                //Dino tap
+                dinoGameContainer.addEventListener('touchstart', jump); //Start the jump
+            }
+        }
+
+        function resetGame() {
+            clearInterval(gameInterval);
+            clearInterval(obstacleInterval);
+            gameStarted = false;
+            score = 0; // Reset score
+            position = 0; // Reset dino position
+            dino.style.bottom = '0px'; // Ensure dino is at the base
+            updateScoreDisplay(); // Update the score display
+
+            // Remove existing obstacles
+            const obstacles = document.querySelectorAll('.obstacle');
+            obstacles.forEach(obstacle => obstacle.remove());
+
+            // Hide the game over message
+            gameOverMessage.style.display = 'none';
+
+            // Restart the game
+            startJumpGame();
+        }
+
+        function updateScoreDisplay() {
+            scoreDisplay.textContent = score;
+            finalScoreDisplay.textContent = score;
         }
 
         showGameSelect();

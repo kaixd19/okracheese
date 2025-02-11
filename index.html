@@ -1,11 +1,28 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cheese-Filled Okra</title>
     <link rel="stylesheet" href="style.css">
+    <style>
+        .game-button {
+            background-color: #4CAF50;
+            /* Green */
+            border: none;
+            color: white;
+            padding: 15px 32px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+        }
+    </style>
 </head>
+
 <body>
     <header>
         <div class="container">
@@ -82,6 +99,7 @@
                         </form>
                         <div id="quoteDisplay" style="display:none;">
                             <p id="motivationalQuote"></p>
+                                  <button onclick="showQuoteForm()">Get Another Quote</button>
                         </div>
                     </div>
                 </aside>
@@ -90,6 +108,11 @@
     </section>
 
     <script>
+        // Check login status on page load
+        if (localStorage.getItem('isLoggedIn') !== 'true') {
+            window.location.href = 'login.html';
+        }
+
         const okraFacts = [
             "Okra is also known as 'lady's finger'.",
             "Okra is a good source of vitamins A and C.",
@@ -111,11 +134,11 @@
             "Okra is rich in antioxidants.",
             "Okra is a self-pollinating plant.",
             "Okra is a versatile vegetable that can be grilled, fried, or boiled."
-        ]; // Add all 100 facts here
+        ];
 
         let currentFactIndex = 0;
 
-        document.getElementById('initialFact').addEventListener('click', function() {
+        document.getElementById('initialFact').addEventListener('click', function () {
             document.getElementById('initialFact').style.display = 'none';
             document.getElementById('additionalFacts').style.display = 'block';
             document.getElementById('backButton').style.display = 'inline-block';
@@ -125,7 +148,7 @@
         function showNextFact() {
             document.getElementById('backButton').style.display = 'inline-block';
             document.getElementById('currentFact').textContent = okraFacts[currentFactIndex];
-            currentFactIndex = (currentFactIndex + 1) % okraFacts.length; // Loop through facts
+            currentFactIndex = (currentFactIndex + 1) % okraFacts.length;
         }
 
         function showInitialFact() {
@@ -134,7 +157,7 @@
             document.getElementById('backButton').style.display = 'none';
         }
 
-        function handleQuoteSubmit(event) {
+         function handleQuoteSubmit(event) {
             event.preventDefault();
 
             const quotes = [
@@ -155,8 +178,14 @@
             document.getElementById('quoteDisplay').style.display = 'block';
             document.getElementById('quoteForm').style.display = 'none';
         }
+
+        function showQuoteForm() {
+            document.getElementById('quoteDisplay').style.display = 'none';
+            document.getElementById('quoteForm').style.display = 'block';
+        }
     </script>
 
     <script src="script.js"></script>
 </body>
+
 </html>

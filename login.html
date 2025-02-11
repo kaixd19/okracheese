@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
     <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
     <header>
         <div class="container">
@@ -25,13 +27,14 @@
         </form>
         <p id="login-error" class="error-message"></p>
     </section>
-    <script src="script.js"></script>
 
     <script>
-                function generateVerificationQuestion() {
+        let correctAnswer;
+
+        function generateVerificationQuestion() {
             const num1 = Math.floor(Math.random() * 10) + 1;
             const num2 = Math.floor(Math.random() * 10) + 1;
-            const operation = Math.random() < 0.5 ? '+' : '-'; // Randomly choose + or -
+            const operation = Math.random() < 0.5 ? '+' : '-';
             let answer;
 
             if (operation === '+') {
@@ -41,31 +44,30 @@
             }
 
             document.getElementById('verification-question').textContent = `What is ${num1} ${operation} ${num2}?`;
-            return answer.toString(); // Return the answer as a string
+            correctAnswer = answer.toString();
+            return correctAnswer;
         }
 
-    let correctAnswer = generateVerificationQuestion();
+        generateVerificationQuestion();
 
-     function handleLogin(event) {
+        function handleLogin(event) {
             event.preventDefault();
 
             const email = document.getElementById('login-email').value;
             const answer = document.getElementById('verification-answer').value;
             const errorMessage = document.getElementById('login-error');
 
-            if (answer === correctAnswer) { // Check Correct Answer
-                isLoggedIn = true;
-                // Store login state in localStorage
+            if (answer === correctAnswer) {
                 localStorage.setItem('isLoggedIn', 'true');
-                // Redirect to home page after successful login
                 window.location.href = "index.html";
-                errorMessage.textContent = ''; // Clear any previous error message
+                errorMessage.textContent = '';
             } else {
                 errorMessage.textContent = 'Incorrect answer. Please try again.';
-                correctAnswer = generateVerificationQuestion(); // Generate a new question
-                document.getElementById('verification-answer').value = ''; // Clear the input
+                generateVerificationQuestion();
+                document.getElementById('verification-answer').value = '';
             }
         }
     </script>
 </body>
+
 </html>

@@ -1,27 +1,28 @@
-async function handleLogin(event) {
-    event.preventDefault();
+// script.js - Handles main page functionality and login check
 
-    const email = document.getElementById('login-email').value;
-    const answer = document.getElementById('verification-answer').value;
-    const errorMessage = document.getElementById('login-error');
+// Function to handle the newsletter form submission (for index.html)
+function handleNewsletterSubmit() {
+    const email = document.getElementById('newsletterEmail').value;
+    alert('Newsletter Email: ' + email + '\n\n(In a real application, this would be sent to a server for processing)');
+    document.getElementById('newsletterForm').reset(); // Clear the form
+}
 
-    // Send data to Google Sheets via Apps Script
-    try {
-        const response = await fetch('https://script.google.com/macros/s/AKfycbwb9MvFBYrW2VEAFlefhOFNkJMvEiTJ3EM5Hv3PyYPOXJ_ikfh-ZjtMtfmJ2D8T7m5l/exec', { // Replace with your Web App URL
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ email: email, answer: answer })
-        });
+// Slideshow functionality (for index.html)
+let slideIndex = 0;
+showSlides();
 
-        const result = await response.json();
+function showSlides() {
+    let i;
+    const slides = document.getElementsByClassName("slide");
+    if (!slides) return; // Exit if there are no slides
 
-        if (result.result === "success") {
-            // Handle successful submission (e.g., redirect)
-            window.location.href = "index.html";
-        } else {
-            errorMessage.textContent = 'Submission failed: ' + result.error;
-        }
-    } catch (error) {
-        errorMessage.textContent = 'An error occurred: ' + error;
+    for (i = 0; i < slides.length; i++) {
+        slides[i].style.display = "none";
     }
+    slideIndex++;
+    if (slideIndex > slides.length) { slideIndex = 1 }
+    if (slides[slideIndex - 1]) {
+        slides[slideIndex - 1].style.display = "block";
+    }
+    setTimeout(showSlides, 2000); // Change image every 2 seconds
 }
